@@ -19,4 +19,11 @@ _Contributors to this project :_
 1. First open your terminal and navigate to current working directory.
 2. Run this command in your terminal $ `npm install`
 3. This will create a node_module folder in the current working directory.
-4. Now run $ `npm start` in your terminal. This starts **nodemon** to start the server on _127.0.0.1:8000_
+
+4. ### Production
+
+   run $ `npm run start:prod` in your terminal. This will execute **nodemon** and RUN **Production** server on _127.0.0.1:3000_
+
+5. ### Development
+
+   run $ `npm run start:dev` in your terminal. This will execute **nodemon** and RUN **development** server on _127.0.0.1:3000_
