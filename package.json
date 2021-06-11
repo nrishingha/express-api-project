@@ -1,11 +1,11 @@
 {
   "name": "express-api-project",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Learning Node.js, Express.js and mongoDB",
   "main": "app.js",
   "scripts": {
     "start": "nodemon server.js",
-    "start:prod": "SET NODE_ENV=production & nodemon server.js"
+    "start:prod": "NODE_ENV=production nodemon server.js"
   },
   "author": "Roy Nrishinghananda",
   "license": "ISC",
