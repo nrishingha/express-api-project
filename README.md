@@ -26,4 +26,4 @@ _Contributors to this project :_
 
 5. ### Development
 
-   run $ `npm run start:dev` in your terminal. This will execute **nodemon** and RUN **development** server on _127.0.0.1:3000_
+   run $ `npm start` in your terminal. This will execute **nodemon** and RUN **development** server on _127.0.0.1:3000_
