@@ -1,6 +1,6 @@
 {
   "name": "express-api-project",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Learning Node.js, Express.js and mongoDB",
   "main": "app.js",
   "scripts": {
