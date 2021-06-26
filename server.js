@@ -30,7 +30,7 @@ mongoose
 console.log(`Node Environment : ${process.env.NODE_ENV}`);
 const port = process.env.PORT || 3000;
 const server = app.listen(port, () =>
-  console.log(`API server url : 127.0.0.1:${port}`)
+  console.log(`API server url : localhost:${port}`)
 );
 
 process.on('unhandledRejection', (err) => {
