@@ -15,7 +15,7 @@ exports.getOverview = catchAsync(async (req, res, next) => {
 exports.getTour = catchAsync(async (req, res, next) => {
   const tour = await Tour.findOne({ slug: req.params.slug }).populate({
     path: 'reviews',
-    fields: 'reviews rating user',
+    fields: 'review rating user',
   });
 
   if (!tour) {
@@ -43,7 +43,7 @@ exports.getLoginForm = (req, res) => {
 exports.getAccount = (req, res) => {
   res.status(200).render('account', {
     title: 'Your account',
-    user: req.user,
+    // user: req.user,
   });
 };
 

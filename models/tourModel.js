@@ -7,26 +7,25 @@ const tourSchema = new mongoose.Schema(
       type: String,
       required: [true, 'A tour must have a name'],
       unique: true,
-      minlength: [10, 'Name lenght must be greater than 10'],
-      maxlength: [30, 'Name lenght must be less than 30'],
+      trim: true,
+      maxlength: [40, 'A tour name must have less or equal then 40 characters'],
+      minlength: [10, 'A tour name must have more or equal then 10 characters'],
     },
-    slug: {
-      type: String,
-    },
+    slug: String,
     duration: {
       type: Number,
       required: [true, 'A tour must have a duration'],
     },
     maxGroupSize: {
       type: Number,
-      default: 10,
+      required: [true, 'A tour must have a group size'],
     },
     difficulty: {
       type: String,
       required: [true, 'A tour must have a difficulty'],
       enum: {
         values: ['easy', 'medium', 'difficult'],
-        message: 'Difficulty is either: easy, medium or difficult',
+        message: 'Difficulty is either: easy, medium, difficult',
       },
     },
     ratingsAverage: {
@@ -40,11 +39,7 @@ const tourSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    createdAt: {
-      type: Date,
-      default: Date.now(),
-      select: false,
-    },
+
     price: {
       type: Number,
       required: [true, 'A tour must have price'],
@@ -55,13 +50,13 @@ const tourSchema = new mongoose.Schema(
         validator: function (val) {
           return val < this.price;
         },
-        message: 'Discount price {VALUE} must be below reguar price',
+        message: 'Discount price ({VALUE}) should be below regular price',
       },
     },
     summary: {
       type: String,
-      required: [true, 'A tour must have a summary'],
       trim: true,
+      required: [true, 'A tour must have a summary'],
     },
     description: {
       type: String,
@@ -69,9 +64,14 @@ const tourSchema = new mongoose.Schema(
     },
     imageCover: {
       type: String,
-      required: [true, 'A tour must have an image cover'],
+      required: [true, 'A tour must have a cover image'],
     },
     images: [String],
+    createdAt: {
+      type: Date,
+      default: Date.now(),
+      select: false,
+    },
     startDates: [Date],
     secretTour: {
       type: Boolean,

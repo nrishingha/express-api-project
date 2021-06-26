@@ -1,10 +1,10 @@
 extends base
 
 mixin navItem(link, text, icon, active)
-    li(class=`${active ? 'side-nav--active': ''}`)
+    li(class=`${active ? 'side-nav--active' : ''}`)
         a(href=`${link}`)
             svg
-                use(xlink:href=`/img/icons.svg#icon-${icon}`)
+                use(xlink:href=`img/icons.svg#icon-${icon}`)
             | #{text}
 
 block content
@@ -56,4 +56,4 @@ block content
                         label.form__label(for='password-confirm') Confirm password
                         input#password-confirm.form__input(type='password', placeholder='••••••••', required, minlength='8')
                     .form__group.right
-                        button#save-password.btn.btn--small.btn--green.btn--save-password  Save password
+                        button.btn.btn--small.btn--green.btn--save-password Save password

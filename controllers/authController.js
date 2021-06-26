@@ -1,5 +1,5 @@
-const { promisify } = require('util');
 const crypto = require('crypto');
+const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
@@ -37,7 +37,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
     name: req.body.name,
     email: req.body.email,
-    role: req.body.role,
+    // role: req.body.role,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
   });
@@ -60,6 +60,14 @@ exports.login = catchAsync(async (req, res, next) => {
 
   createSendToken(user, 200, res);
 });
+
+exports.logout = (req, res) => {
+  res.cookie('jwt', 'loggedout', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+  res.status(200).json({ status: 'success' });
+};
 
 exports.protect = catchAsync(async (req, res, next) => {
   let token;
@@ -90,7 +98,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
   }
 
-  if (currentUser.changesPasswordAfter(decoded.iat)) {
+  if (currentUser.changedPasswordAfter(decoded.iat)) {
     return next(
       new AppError('User recently changed password! Please login again', 401)
     );
@@ -115,7 +123,7 @@ exports.isLoggedIn = async (req, res, next) => {
         return next();
       }
 
-      if (currentUser.changesPasswordAfter(decoded.iat)) {
+      if (currentUser.changedPasswordAfter(decoded.iat)) {
         return next();
       }
       res.locals.user = currentUser;
@@ -152,19 +160,18 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     'host'
   )}/api/v1/users/resetPassword/${resetToken}`;
 
-  const messsage = `Forgot your password? submit a PATCH request with your new password and passwordConfirm to ${resetURL}.\nIf you didn't forget your password, please ignore this email.`;
+  const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to ${resetURL}.\nIf you didn't forget your password, please ignore this email.`;
 
   try {
     await sendEmail({
       email: user.email,
-      subject: 'Your password reset Token (valid for 10 min)',
-      text: messsage,
-      messsage,
+      subject: 'Your password reset token (valid for 10 min)',
+      message,
     });
 
     res.status(200).json({
       status: 'success',
-      messsage: 'Token is sent to email',
+      message: 'Token sent to email',
     });
   } catch (err) {
     user.passwordResetToken = undefined;
@@ -212,11 +219,3 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 
   createSendToken(user, 200, res);
 });
-
-exports.logout = (req, res) => {
-  res.cookie('jwt', 'loggedout', {
-    expires: new Date(Date.now() + 10 * 1000),
-    httpOnly: true,
-  });
-  res.status(200).json({ status: 'success' });
-};

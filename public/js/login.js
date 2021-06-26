@@ -30,12 +30,10 @@ export const logout = async () => {
       url: 'http://localhost:3000/api/v1/users/logout',
     });
 
-    if (res.data.status === 'success') {
-      showAlert('success', 'Logging out...');
-      location.reload();
-      showAlert('success', 'Logged out successfully');
-    }
+    if ((res.data.status = 'success')) location.reload();
   } catch (error) {
     showAlert('error', 'Error logging out! Try again.');
   }
 };
+
+// showAlert('success', 'Logging out...');

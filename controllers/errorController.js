@@ -1,14 +1,13 @@
 const AppError = require('../utils/appError');
 
 const handleCastErrorDB = (err) => {
-  const message = `Invaid ${err.path}: ${err.value}`;
+  const message = `Invalid ${err.path}: ${err.value}`;
   return new AppError(message, 400);
 };
 
-const handleDulicatedFieldsDB = (err) => {
-  console.log(err);
-  const value = Object.values(err.keyValue)[0];
-  const message = `Duplicated field value: ${value}. Please use another value!`;
+const handleDuplicateFieldsDB = (err) => {
+  const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
+  const message = `Duplicate field value: ${value}. Please use another value!`;
   return new AppError(message, 400);
 };
 
@@ -19,15 +18,12 @@ const handleValidationErrorDB = (err) => {
 };
 
 const handleJWTError = () =>
-  new AppError('Invalid token. Please login aagain!', 401);
+  new AppError('Invalid token. Please login again!', 401);
 
 const handleJWTExpiredError = () =>
-  new AppError('Your Token has expired! Please log in again', 401);
+  new AppError('Your token has expired! Please log in again', 401);
 
-const sendErrorDevelopment = (err, req, res) => {
-  if (!req.originalUrl) {
-    req.originalUrl = req.url;
-  }
+const sendErrorDev = (err, req, res) => {
   if (req.originalUrl.startsWith('/api')) {
     return res.status(err.statusCode).json({
       status: err.status,
@@ -42,7 +38,7 @@ const sendErrorDevelopment = (err, req, res) => {
   });
 };
 
-const sendErrorProduction = (err, req, res) => {
+const sendErrorProd = (err, req, res) => {
   if (req.originalUrl.startsWith('/api')) {
     if (err.isOperational) {
       return res.status(err.statusCode).json({
@@ -58,12 +54,12 @@ const sendErrorProduction = (err, req, res) => {
   if (err.isOperational) {
     return res.status(err.statusCode).render('error', {
       title: 'Something went wrong!',
-      msg: err.msg,
+      msg: err.message,
     });
   }
   return res.status(err.statusCode).render('error', {
-    title: 'Something went wrong',
-    msg: 'Please try again later',
+    title: 'Something went wrong!',
+    msg: 'Please try again later.',
   });
 };
 
@@ -72,19 +68,17 @@ module.exports = (err, req, res, next) => {
   err.status = err.status || 'error';
 
   if (process.env.NODE_ENV === 'development') {
-    console.log(err);
-    sendErrorDevelopment(err, req, res);
+    sendErrorDev(err, req, res);
   } else if (process.env.NODE_ENV === 'production') {
     let error = { ...err };
     error.message = err.message;
-    //This line is not clear yet
     if (error.name === 'CastError') error = handleCastErrorDB(error);
-    if (error.code === 11000) error = handleDulicatedFieldsDB(error);
+    if (error.code === 11000) error = handleDuplicateFieldsDB(error);
     if (error.name === 'ValidationError')
       error = handleValidationErrorDB(error);
     if (error.name === 'JsonWebTokenError') error = handleJWTError();
     if (error.name === 'TokenExpiredError') error = handleJWTExpiredError();
 
-    sendErrorProduction(error, req, res);
+    sendErrorProd(error, req, res);
   }
 };

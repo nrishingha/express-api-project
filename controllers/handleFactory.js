@@ -46,10 +46,10 @@ exports.createOne = (Model) =>
     });
   });
 
-exports.getOne = (Model, populateOption) =>
+exports.getOne = (Model, popOptions) =>
   catchAsync(async (req, res, next) => {
     let query = Model.findById(req.params.id);
-    if (populateOption) query = query.populate(populateOption);
+    if (popOptions) query = query.populate(popOptions);
     const doc = await query;
 
     if (!doc) {
@@ -72,7 +72,7 @@ exports.getAll = (Model) =>
     const features = new APIFeatures(Model.find(filter), req.query)
       .filter()
       .sort()
-      .limitField()
+      .limitFields()
       .paginate();
     const doc = await features.query;
 
