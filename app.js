@@ -14,6 +14,7 @@ const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const viewRouter = require('./routes/viewsRoutes');
+const bookingRouter = require('./routes/bookingRoutes');
 
 const app = express();
 
@@ -23,7 +24,9 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 //Global Middlewares
 //Set security http headers
-app.use(helmet());
+
+//contentSecurityPolicy: false
+app.use(helmet({ contentSecurityPolicy: false }));
 
 app.use(
   helmet.contentSecurityPolicy({
@@ -80,6 +83,7 @@ app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
+app.use('/api/v1/bookings', bookingRouter);
 
 //Exception routes
 app.all('*', (req, res, next) => {
