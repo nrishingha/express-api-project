@@ -8581,9 +8581,7 @@ function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
-            url = type === 'password' ? 'http://localhost:3000/api/v1/users/updateMyPassword' : 'http://localhost:3000/api/v1/users/updateMe'; // ? 'http://127.0.0.1:3000/api/v1/users/updateMyPassword'
-            // : 'http://127.0.0.1:3000/api/v1/users/updateMe';
-
+            url = type === 'password' ? 'http://localhost:3000/api/v1/users/updateMyPassword' : 'http://localhost:3000/api/v1/users/updateMe';
             _context.next = 4;
             return (0, _axios.default)({
               method: 'PATCH',
@@ -8905,12 +8903,11 @@ if (loginForm) loginForm.addEventListener('submit', function (e) {
 if (logOutBtn) logOutBtn.addEventListener('click', _login.logout);
 if (userDataForm) userDataForm.addEventListener('submit', function (e) {
   e.preventDefault();
-  var name = document.getElementById('name').value;
-  var email = document.getElementById('email').value;
-  (0, _updateSettings.updateSettings)({
-    name: name,
-    email: email
-  }, 'data');
+  var form = new FormData();
+  form.append('name', document.getElementById('name').value);
+  form.append('email', document.getElementById('email').value);
+  form.append('photo', document.getElementById('photo').files[0]);
+  (0, _updateSettings.updateSettings)(form, 'data');
 });
 if (userPasswordForm) userPasswordForm.addEventListener('submit',
 /*#__PURE__*/
@@ -8928,20 +8925,17 @@ function () {
             passwordCurrent = document.getElementById('password-current').value;
             password = document.getElementById('password').value;
             passwordConfirm = document.getElementById('password-confirm').value;
-            _context.next = 7;
-            return (0, _updateSettings.updateSettings)({
+            (0, _updateSettings.updateSettings)({
               passwordCurrent: passwordCurrent,
               password: password,
               passwordConfirm: passwordConfirm
             }, 'password');
-
-          case 7:
             document.querySelector('.btn--save-password').textContent = 'Save password';
             document.getElementById('password-current').value = '';
             document.getElementById('password').value = '';
             document.getElementById('password-confirm').value = '';
 
-          case 11:
+          case 10:
           case "end":
             return _context.stop();
         }
@@ -8981,7 +8975,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51377" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55954" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -27,10 +27,13 @@ if (logOutBtn) logOutBtn.addEventListener('click', logout);
 if (userDataForm)
   userDataForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
+    const form = new FormData();
 
-    updateSettings({ name, email }, 'data');
+    form.append('name', document.getElementById('name').value);
+    form.append('email', document.getElementById('email').value);
+    form.append('photo', document.getElementById('photo').files[0]);
+
+    updateSettings(form, 'data');
   });
 
 if (userPasswordForm)
@@ -42,10 +45,7 @@ if (userPasswordForm)
     const password = document.getElementById('password').value;
     const passwordConfirm = document.getElementById('password-confirm').value;
 
-    await updateSettings(
-      { passwordCurrent, password, passwordConfirm },
-      'password'
-    );
+    updateSettings({ passwordCurrent, password, passwordConfirm }, 'password');
 
     document.querySelector('.btn--save-password').textContent = 'Save password';
     document.getElementById('password-current').value = '';
